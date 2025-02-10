@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import ToolsSidebar from './../common/ToolsSidebar';
 
 const AppTopbar = (props) => {
 
+  const [t] = useTranslation();
+  
   const [sidebarVisible, setSidebarVisible] = useState(false);
 
   return (
@@ -15,7 +18,7 @@ const AppTopbar = (props) => {
         </a>
         <div className="layout-topbar-icons">
           <a onClick={() => setSidebarVisible(true)}>
-            <span className="layout-topbar-item-text">Tools</span>
+            <span className="layout-topbar-item-text">{t('Tools')}</span>
             <span className="layout-topbar-icon pi pi-briefcase" />
           </a>
         </div>

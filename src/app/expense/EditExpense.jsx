@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useForm, Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
 import * as dayjs from 'dayjs';
 import * as yup from 'yup';
 
@@ -27,6 +29,10 @@ const editExpenseValidationSchema = yup.object().shape({
 });
 
 const EditExpense = (props) => {
+
+  const [t] = useTranslation();
+  
+  const history = useHistory();
 
   const [state, setState] = useTracked();
   const { register, handleSubmit, errors, setError, setValue, control } = useForm({
@@ -78,7 +84,7 @@ const EditExpense = (props) => {
         if (error.response.status === 401) {
           messages.show({
             severity: 'error',
-            detail: 'Something went wrong. Try again.',
+            detail: t('Something went wrong. Try again.'),
             sticky: true,
             closable: true,
             life: 5000
@@ -103,11 +109,13 @@ const EditExpense = (props) => {
 
           messages.show({
             severity: 'success',
-            detail: 'Your expense info updated successfully.',
+            detail: t('Your expense info updated successfully.'),
             sticky: false,
             closable: false,
             life: 5000
           });
+
+          history.goBack();
         }
 
       })
@@ -128,7 +136,7 @@ const EditExpense = (props) => {
         else if (error.response.status === 401) {
           messages.show({
             severity: 'error',
-            detail: 'Something went wrong. Try again.',
+            detail: t('Something went wrong. Try again.'),
             sticky: true,
             closable: true,
             life: 5000
@@ -140,7 +148,7 @@ const EditExpense = (props) => {
 
   return (
     <div>
-      <Helmet title="Edit Expense" />
+      <Helmet title={t("Edit Expense")} />
 
       <CurrencySidebar visible={currencyVisible} onHide={(e) => setCurrencyVisible(false)} />
 
@@ -157,13 +165,13 @@ const EditExpense = (props) => {
         <div className="p-col-12">
           <Card className="rounded-border">
             <div>
-              <div className="p-card-title p-grid p-nogutter p-justify-between">Edit Expense</div>
-              <div className="p-card-subtitle">Edit selected expense information below.</div>
+              <div className="p-card-title p-grid p-nogutter p-justify-between">{t("Edit Expense")}</div>
+              <div className="p-card-subtitle">{t("Edit selected expense information below.")}</div>
             </div>
             <br />
             <form onSubmit={handleSubmit(submitUpdateExpense)}>
               <div className="p-fluid">
-                <label>Expense Date</label>
+                <label>{t("Expense Date")}</label>
                 <Controller
                   name="expense_date"
                   onChange={([e]) => {
@@ -183,7 +191,7 @@ const EditExpense = (props) => {
                 <p className="text-error">{errors.expense_date?.message}</p>
               </div>
               <div className="p-fluid">
-                <label>Expense Category</label>
+                <label>{t("Expense Category")}</label>
                 <Controller
                   name="category"
                   onChange={([e]) => {
@@ -193,12 +201,12 @@ const EditExpense = (props) => {
                   as={
                     <Dropdown
                       filter={true}
-                      filterPlaceholder="Search here"
+                      filterPlaceholder={t("Search here")}
                       showClear={true}
                       filterInputAutoFocus={false}
                       options={expenseCategories}
                       style={{ width: '100%' }}
-                      placeholder="Expense Category"
+                      placeholder={t("Expense Category")}
                       optionLabel="category_name"
                     />
                   }
@@ -206,28 +214,28 @@ const EditExpense = (props) => {
                 <p className="text-error">{errors.category?.message}</p>
               </div>
               <div className="p-fluid">
-                <label>Amount</label>
+                <label>{t("Amount")}</label>
                 <div className="p-inputgroup">
-                  <input type="text" ref={register} placeholder="Amount" name="amount" className="p-inputtext p-component p-filled" />
+                  <input type="text" ref={register} placeholder={t("Amount")} name="amount" className="p-inputtext p-component p-filled" />
                   <Button
-                    label={`${state.currencies.length === 0 ? 'loading' : state.currentCurrency.currency_code}`}
+                    label={`${state.currencies.length === 0 ? t("loading") : state.currentCurrency.currency_code}`}
                     type="button"
                     onClick={(e) => setCurrencyVisible(true)} />
                 </div>
                 <p className="text-error">{errors.amount?.message}</p>
               </div>
               <div className="p-fluid">
-                <label>Spent On</label>
+                <label>{t("Spent On")}</label>
                 <input type="text" ref={register} name="spent_on" className="p-inputtext p-component p-filled" />
                 <p className="text-error">{errors.spent_on?.message}</p>
               </div>
               <div className="p-fluid">
-                <label>Remarks</label>
+                <label>{t("Remarks")}</label>
                 <textarea ref={register} rows={5} placeholder="" name="remarks" className="p-inputtext p-inputtextarea p-component p-inputtextarea-resizable" />
                 <p className="text-error">{errors.remarks?.message}</p>
               </div>
               <div className="p-fluid">
-                <Button disabled={submitting} type="submit" label="Save Changes" icon="pi pi-save"
+                <Button disabled={submitting} type="submit" label={t("Save Changes")} icon="pi pi-save"
                   className="p-button-raised" />
               </div>
             </form>

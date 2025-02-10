@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useForm, Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import * as dayjs from 'dayjs';
 
@@ -31,6 +32,8 @@ const addExpenseValidationSchema = yup.object().shape({
 
 const Dashboard = (props) => {
 
+  const [t] = useTranslation();
+  
   const [state] = useTracked();
   const { register, handleSubmit, setValue, errors, setError, reset, control } = useForm({
     validationSchema: addExpenseValidationSchema
@@ -146,7 +149,7 @@ const Dashboard = (props) => {
 
           messages.show({
             severity: 'success',
-            detail: 'Your expense on ' + response.data.request.spent_on + ' added.',
+            detail: t('Your expense on ') + response.data.request.spent_on + t(' added.'),
             sticky: false,
             closable: false,
             life: 5000
@@ -160,7 +163,7 @@ const Dashboard = (props) => {
           messages.clear();
           messages.show({
             severity: 'error',
-            detail: 'Something went wrong. Try again.',
+            detail: t('Something went wrong. Try again.'),
             sticky: true,
             closable: true,
             life: 5000
@@ -194,7 +197,7 @@ const Dashboard = (props) => {
       else {
         return (
           <div className="p-grid p-nogutter p-justify-center">
-            <h4 className="color-subtitle">Spend some cash to see recent.</h4>
+            <h4 className="color-subtitle">{t("Spend some cash to see recent.")}</h4>
           </div>
         );
       }
@@ -218,7 +221,7 @@ const Dashboard = (props) => {
       else {
         return (
           <div className="p-grid p-nogutter p-justify-center">
-            <h4 className="color-subtitle">Add some earnings to see recent.</h4>
+            <h4 className="color-subtitle">{t("Add some earnings to see recent.")}</h4>
           </div>
         );
       }
@@ -244,7 +247,7 @@ const Dashboard = (props) => {
     }
     else {
       return <div>
-        <div className="text-center">No transaction data found.</div>
+        <div className="text-center">{t("No transaction data found.")}</div>
         <hr />
       </div>
     }
@@ -271,7 +274,7 @@ const Dashboard = (props) => {
             <div className="p-grid">
               <div className="p-col-6 p-md-3">
                 <div className="p-panel p-component">
-                  <div className="p-panel-titlebar"><span className="color-title text-bold">Expense Last Month</span>
+                  <div className="p-panel-titlebar"><span className="color-title text-bold">{t("Expense Last Month")}</span>
                   </div>
                   <div className="p-panel-content-wrapper p-panel-content-wrapper-expanded" id="pr_id_1_content"
                     aria-labelledby="pr_id_1_label" aria-hidden="false">
@@ -284,7 +287,7 @@ const Dashboard = (props) => {
 
               <div className="p-col-6 p-md-3">
                 <div className="p-panel p-component">
-                  <div className="p-panel-titlebar"><span className="color-title text-bold">Expense This Month</span></div>
+                  <div className="p-panel-titlebar"><span className="color-title text-bold">{t("Expense This Month")}</span></div>
                   <div className="p-panel-content-wrapper p-panel-content-wrapper-expanded" id="pr_id_1_content"
                     aria-labelledby="pr_id_1_label" aria-hidden="false">
                     <div className="p-panel-content">
@@ -294,9 +297,9 @@ const Dashboard = (props) => {
                 </div>
               </div>
 
-              <div className="p-col-6 p-md-3">
+              {/* <div className="p-col-6 p-md-3">
                 <div className="p-panel p-component">
-                  <div className="p-panel-titlebar"><span className="color-title text-bold">Income Last Month</span>
+                  <div className="p-panel-titlebar"><span className="color-title text-bold">{t("Income Last Month")}</span>
                   </div>
                   <div className="p-panel-content-wrapper p-panel-content-wrapper-expanded" id="pr_id_1_content"
                     aria-labelledby="pr_id_1_label" aria-hidden="false">
@@ -309,7 +312,7 @@ const Dashboard = (props) => {
 
               <div className="p-col-6 p-md-3">
                 <div className="p-panel p-component">
-                  <div className="p-panel-titlebar"><span className="color-title text-bold">Income This Month</span></div>
+                  <div className="p-panel-titlebar"><span className="color-title text-bold">{t("Income This Month")}</span></div>
                   <div className="p-panel-content-wrapper p-panel-content-wrapper-expanded" id="pr_id_1_content"
                     aria-labelledby="pr_id_1_label" aria-hidden="false">
                     <div className="p-panel-content">
@@ -317,7 +320,7 @@ const Dashboard = (props) => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
 
           </div>
@@ -329,8 +332,8 @@ const Dashboard = (props) => {
         <div className="p-col-12 p-md-6 p-lg-4">
           <Card className="rounded-border">
             <div>
-              <div className="p-card-title p-grid p-nogutter p-justify-between">Expense Info</div>
-              <div className="p-card-subtitle">Enter your expense information below.</div>
+              <div className="p-card-title p-grid p-nogutter p-justify-between">{t("Expense Info")}</div>
+              <div className="p-card-subtitle">{t("Enter your expense information below.")}</div>
             </div>
             <br />
             <form onSubmit={handleSubmit(submitExpense)}>
@@ -366,12 +369,12 @@ const Dashboard = (props) => {
                   as={
                     <Dropdown
                       filter={true}
-                      filterPlaceholder="Search here"
+                      filterPlaceholder={t("Search here")}
                       showClear={true}
                       filterInputAutoFocus={false}
                       options={expenseCategories}
                       style={{ width: '100%' }}
-                      placeholder="Expense Category"
+                      placeholder={t("Expense Category")}
                       optionLabel="category_name"
                     />
                   }
@@ -379,12 +382,12 @@ const Dashboard = (props) => {
                 <p className="text-error">{errors.category?.message}</p>
               </div>
               <div className="p-fluid">
-                <input type="text" ref={register} placeholder="Spent On" name="spent_on" className="p-inputtext p-component p-filled" />
+                <input type="text" ref={register} placeholder={t("Spent On")} name="spent_on" className="p-inputtext p-component p-filled" />
                 <p className="text-error">{errors.spent_on?.message}</p>
               </div>
               <div className="p-fluid">
                 <div className="p-inputgroup">
-                  <input type="number" step="0.00" ref={register} keyfilter="money" placeholder="Amount" name="amount" className="p-inputtext p-component p-filled" />
+                  <input type="number" step="0.00" ref={register} keyfilter="money" placeholder={t("Amount")} name="amount" className="p-inputtext p-component p-filled" />
                   <Button
                     label={`${state.currencies.length === 0 ? 'loading' : state.currentCurrency.currency_code}`}
                     type="button"
@@ -393,11 +396,11 @@ const Dashboard = (props) => {
                 <p className="text-error">{errors.amount?.message}</p>
               </div>
               <div className="p-fluid">
-                <textarea ref={register} rows={5} placeholder="Remarks" name="remarks" className="p-inputtext p-inputtextarea p-component p-inputtextarea-resizable" />
+                <textarea ref={register} rows={5} placeholder={t("Remarks")} name="remarks" className="p-inputtext p-inputtextarea p-component p-inputtextarea-resizable" />
                 <p className="text-error">{errors.remarks?.message}</p>
               </div>
               <div className="p-fluid">
-                <Button disabled={submitting} type="submit" label="Add Expense" icon="pi pi-plus"
+                <Button disabled={submitting} type="submit" label={t("Add Expense")} icon="pi pi-plus"
                   className="p-button-raised" />
               </div>
             </form>
@@ -407,8 +410,8 @@ const Dashboard = (props) => {
         <div className="p-col-12 p-md-6 p-lg-4">
           <Card className="rounded-border">
             <div>
-              <div className="p-card-title p-grid p-nogutter p-justify-between">Recent Expenses -</div>
-              <div className="p-card-subtitle">Here are few expenses you've made.</div>
+              <div className="p-card-title p-grid p-nogutter p-justify-between">{t("Recent Expenses -")}</div>
+              <div className="p-card-subtitle">{t("Here are few expenses you've made.")}</div>
             </div>
             <br />
             <div>
@@ -417,18 +420,18 @@ const Dashboard = (props) => {
           </Card>
         </div>
 
-        <div className="p-col-12 p-md-6 p-lg-4">
+        {/* <div className="p-col-12 p-md-6 p-lg-4">
           <Card className="rounded-border">
             <div>
-              <div className="p-card-title p-grid p-nogutter p-justify-between">Recent Incomes +</div>
-              <div className="p-card-subtitle">Here are few incomes you've added.</div>
+              <div className="p-card-title p-grid p-nogutter p-justify-between">{t("Recent Incomes +")}</div>
+              <div className="p-card-subtitle">{t("Here are few incomes you've added.")}</div>
             </div>
             <br />
             <div>
               {renderRecentIncome()}
             </div>
           </Card>
-        </div>
+        </div> */}
       </div>
     </div>
   )

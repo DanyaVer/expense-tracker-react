@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { Messages } from 'primereact/messages';
@@ -17,6 +19,9 @@ const expenseCategoryValidationSchema = yup.object().shape({
 });
 
 const EditExpenseCategory = (props) => {
+  const [t] = useTranslation();
+  
+  const history = useHistory();
 
   useEffect(() => {
     requestExpenseCategory();
@@ -39,7 +44,7 @@ const EditExpenseCategory = (props) => {
         if (error.response.status === 401) {
           messages.show({
             severity: 'error',
-            detail: 'Something went wrong. Try again.',
+            detail: t('Something went wrong. Try again.'),
             sticky: true,
             closable: true,
             life: 5000
@@ -59,11 +64,13 @@ const EditExpenseCategory = (props) => {
 
           messages.show({
             severity: 'success',
-            detail: 'Your expense category info updated successfully.',
+            detail: t('Your expense category info updated successfully.'),
             sticky: false,
             closable: false,
             life: 5000
           });
+
+          history.goBack();
         }
 
       })
@@ -83,7 +90,7 @@ const EditExpenseCategory = (props) => {
         else if (error.response.status === 401) {
           messages.show({
             severity: 'error',
-            detail: 'Something went wrong. Try again.',
+            detail: t('Something went wrong. Try again.'),
             sticky: true,
             closable: true,
             life: 5000
@@ -95,7 +102,7 @@ const EditExpenseCategory = (props) => {
 
   return (
     <div>
-      <Helmet title="Edit Expense" />
+      <Helmet title={t("Edit Expense")} />
 
       <div className="p-grid p-nogutter">
         <div className="p-col-12">
@@ -110,20 +117,20 @@ const EditExpenseCategory = (props) => {
         <div className="p-col-12">
           <Card className="rounded-border">
             <div>
-              <div className="p-card-title p-grid p-nogutter p-justify-between">Edit Expense Category</div>
-              <div className="p-card-subtitle">Edit selected expense category information below.</div>
+              <div className="p-card-title p-grid p-nogutter p-justify-between">{t("Edit Expense Category")}</div>
+              <div className="p-card-subtitle">{t("Edit selected expense category information below.")}</div>
             </div>
             <br />
             <form onSubmit={handleSubmit(submitUpdateExpenseCategory)}>
               <div className="p-fluid">
-                <label>Category Name</label>
+                <label>{t("Category Name")}</label>
                 <div className="p-fluid">
-                  <input type="text" ref={register} placeholder="Category name" name="category_name" className="p-inputtext p-component p-filled" />
+                  <input type="text" ref={register} placeholder={t("Category Name")} name="category_name" className="p-inputtext p-component p-filled" />
                   <p className="text-error">{errors.category_name?.message}</p>
                 </div>
               </div>
               <div className="p-fluid">
-                <Button disabled={submitting} type="submit" label="Save Changes" icon="pi pi-save" className="p-button-raised" />
+                <Button disabled={submitting} type="submit" label={t("Save Changes")} icon="pi pi-save" className="p-button-raised" />
               </div>
             </form>
           </Card>

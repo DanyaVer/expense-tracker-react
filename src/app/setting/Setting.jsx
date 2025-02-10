@@ -22,7 +22,7 @@ const Setting = (props) => {
   const [t, i18n] = useTranslation();
 
   const toggleLanguage = useCallback(() => {
-    i18n.language === 'en' ? i18n.changeLanguage('bn') : i18n.changeLanguage('en');
+    i18n.language === 'en' ? i18n.changeLanguage('uk') : i18n.changeLanguage('en');
     setItem('language', i18n.language);
   }, [i18n]);
 
@@ -37,7 +37,7 @@ const Setting = (props) => {
 
           messages.show({
             severity: 'success',
-            detail: 'Current currency set to ' + state.currentCurrency.currency_code + ' (' + state.currentCurrency.currency_name + ').',
+            detail: t('Current currency set to ') + state.currentCurrency.currency_code + ' (' + state.currentCurrency.currency_name + ').',
             sticky: false,
             closable: false,
             life: 5000
@@ -53,7 +53,7 @@ const Setting = (props) => {
           messages.clear();
           messages.show({
             severity: 'error',
-            detail: 'Something went wrong. Try again.',
+            detail: t('Something went wrong. Try again.'),
             sticky: true,
             closable: true,
             life: 5000
@@ -64,7 +64,7 @@ const Setting = (props) => {
           messages.clear();
           messages.show({
             severity: 'error',
-            detail: 'Currency is same as selected. Nothing changed.',
+            detail: t('Currency is same as selected. Nothing changed.'),
             sticky: true,
             closable: true,
             life: 5000
@@ -76,7 +76,7 @@ const Setting = (props) => {
 
   return (
     <div>
-      <Helmet title="Settings" />
+      <Helmet title={t("Settings")} />
 
       <CurrencySidebar visible={visible} onHide={(e) => setVisible(false)} />
 
@@ -93,26 +93,26 @@ const Setting = (props) => {
         <div className="p-col-12 p-md-6">
           <Card className="rounded-border">
             <div>
-              <div className="p-card-title p-grid p-nogutter p-justify-between">App Settings</div>
-              <div className="p-card-subtitle">Below are the current setup for this app.</div>
+              <div className="p-card-title p-grid p-nogutter p-justify-between">{t("App Settings")}</div>
+              <div className="p-card-subtitle">{t("Below are the current setup for this app.")}</div>
             </div>
             <br />
             <div className="p-grid p-nogutter p-justify-between">
               <h3 className="color-title p-col-4">
-                Current Currency:
+                {t("Current Currency")}:
                 </h3>
               <h3 className="color-highlight p-col-4">
                 {state.currencies.length === 0 ? 'loading' : state.currentCurrency.currency_code + ' (' + state.currentCurrency.currency_name + ')'}
               </h3>
               <h3>
-                <Button label="Change" icon="pi pi-refresh"
+                <Button label={t("Change")} icon="pi pi-refresh"
                   className="p-button-rounded p-button-raised p-button-secondary" type="button"
                   onClick={(e) => setVisible(true)} />
               </h3>
             </div>
 
             <div className="p-card-footer p-fluid">
-              <Button label="Update" className="" icon="pi pi-save" onClick={() => submitSetting()} />
+              <Button label={t("Update")} className="" icon="pi pi-save" onClick={() => submitSetting()} />
             </div>
           </Card>
         </div>
@@ -120,19 +120,19 @@ const Setting = (props) => {
         <div className="p-col-12 p-md-6">
           <Card className="rounded-border">
             <div>
-              <div className="p-card-title p-grid p-nogutter p-justify-between">Interface Setting</div>
-              <div className="p-card-subtitle">Below are the current setup for this UI.</div>
+              <div className="p-card-title p-grid p-nogutter p-justify-between">{t("Interface Setting")}</div>
+              <div className="p-card-subtitle">{t("Below are the current setup for this UI.")}</div>
             </div>
             <br />
             <div className="p-grid p-nogutter p-justify-between">
               <h3 className="color-title p-col-4">
-                Menu Color:
+                {t("Menu Color")}:
                 </h3>
               <h3 className="color-highlight p-col-4">
                 {state.layoutColorMode === 'dark' ? 'Dark' : 'Light'}
               </h3>
               <h3>
-                <Button label="Toggle" icon="pi pi-refresh"
+                <Button label={t("Toggle")} icon="pi pi-refresh"
                   className="p-button-rounded p-button-raised p-button-secondary"
                   type="button"
                   onClick={(e) => {
@@ -142,13 +142,13 @@ const Setting = (props) => {
             </div>
             <div className="p-grid p-nogutter p-justify-between">
               <h3 className="color-title p-col-4">
-                Menu Mode:
+                {t("Menu Mode")}:
                 </h3>
               <h3 className="color-highlight p-col-4">
                 {state.layoutMode === 'static' ? 'Static' : 'Overlay'}
               </h3>
               <h3>
-                <Button label="Toggle" icon="pi pi-refresh"
+                <Button label={t("Toggle")} icon="pi pi-refresh"
                   className="p-button-rounded p-button-raised p-button-secondary"
                   type="button"
                   onClick={(e) => {
@@ -158,13 +158,13 @@ const Setting = (props) => {
             </div>
             <div className="p-grid p-nogutter p-justify-between">
               <h3 className="color-title p-col-4">
-                Language:
+                {t("Language")}:
                 </h3>
               <h3 className="color-highlight p-col-4">
-                {i18n.language === 'en' ? 'English' : 'বাংলা'}
+                {i18n.language === 'en' ? 'English' : 'Українська'}
               </h3>
               <h3>
-                <Button label="Toggle" icon="pi pi-refresh"
+                <Button label={t("Toggle")} icon="pi pi-refresh"
                   className="p-button-rounded p-button-raised p-button-secondary"
                   type="button"
                   onClick={(e) => toggleLanguage()} />

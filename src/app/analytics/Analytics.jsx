@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import { useTranslation } from 'react-i18next';
 
 import { Messages } from 'primereact/messages';
 import { Card } from 'primereact/card';
@@ -13,6 +14,8 @@ import axios from './../../Axios';
 let messages;
 
 const Analytics = (props) => {
+
+  const [t] = useTranslation();
 
   const [incomeExpenseCategoryId, setIncomeExpenseCategoryId] = useState(null)
   const [incomeExpenseCategories, setIncomeExpenseCategories] = useState([])
@@ -81,7 +84,7 @@ const Analytics = (props) => {
 
   return (
     <div>
-      <Helmet title="Analytics" />
+      <Helmet title={t("Analytics")} />
 
       <div className="p-grid p-nogutter">
         <div className="p-col-12">
@@ -97,8 +100,8 @@ const Analytics = (props) => {
           <Card className="rounded-border">
             <div className='p-grid'>
               <div className='p-col-9'>
-                <div className="p-card-title p-grid p-nogutter p-justify-between">Monthly Income & Expense Chart</div>
-                <div className="p-card-subtitle">Glimpse of your incomes and expenses for a year.</div>
+                <div className="p-card-title p-grid p-nogutter p-justify-between">{t('Monthly Income & Expense Chart')}</div>
+                <div className="p-card-subtitle">{t('Glimpse of your incomes and expenses for a year.')}</div>
               </div>
               <div className="p-col-3" align="right">
                 {monthWiseChartData.barChartDataLoading ? <ProgressSpinner style={{ height: '25px', width: '25px' }} strokeWidth={'4'} /> : ''}
@@ -115,8 +118,8 @@ const Analytics = (props) => {
           <Card className="rounded-border">
             <div className='p-grid'>
               <div className='p-col-9'>
-                <div className="p-card-title p-grid p-nogutter p-justify-between">Category Wise Income & Expense Chart</div>
-                <div className="p-card-subtitle">Glimpse of your incomes and expenses for a category.</div>
+                <div className="p-card-title p-grid p-nogutter p-justify-between">{t('Category Wise Income & Expense Chart')}</div>
+                <div className="p-card-subtitle">{t('Glimpse of your incomes and expenses for a category.')}</div>
               </div>
               <div className="p-col-3" align="right">
                 {categoryWiseChartData.barChartDataLoading ? <ProgressSpinner style={{ height: '25px', width: '25px' }} strokeWidth={'4'} /> : ''}
@@ -137,7 +140,7 @@ const Analytics = (props) => {
                 filterInputAutoFocus={false}
                 options={incomeExpenseCategories}
                 style={{ width: '100%' }}
-                placeholder="Select an Income Expense Category"
+                placeholder={t("Select an Income Expense Category")}
                 optionLabel="category_name"
                 optionValue="id"
               />

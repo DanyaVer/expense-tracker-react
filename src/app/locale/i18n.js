@@ -3,7 +3,7 @@ import { initReactI18next } from 'react-i18next';
 
 import { getItem } from './../../Helpers';
 
-import bn from './translations/bn';
+import uk from './translations/uk';
 import en from './translations/en';
 
 i18n
@@ -11,7 +11,7 @@ i18n
   .init({
     resources: {
       en: en,
-      bn: bn
+      uk: uk
     },
     lng: getItem('language') ? getItem('language') : 'en',
     keySeparator: false, // we do not use keys in form messages.welcome

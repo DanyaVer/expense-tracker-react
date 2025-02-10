@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { Helmet } from 'react-helmet';
@@ -12,7 +13,6 @@ import axios from './../../Axios';
 import { authApiEndpoints } from './../../API';
 
 import LocaleToggle from './../locale/LocaleToggle';
-// import i18n from './../../locals/i18n';
 
 const registerValidationSchema = yup.object().shape({
   name: yup.string().required('Name field is required').min(4, 'Name must be at most 4 character'),
@@ -25,6 +25,8 @@ let messages;  // For alert message
 
 const Register = (props) => {
 
+  const [t] = useTranslation();
+  
   const [submitting, setSubmitting] = useState(false);
 
   // console.log('Register', props);
@@ -42,7 +44,7 @@ const Register = (props) => {
 
         if (response.status === 201) {
           messages.clear();
-          messages.show({ severity: 'success', detail: 'Registration successful. Go to login.', sticky: true });
+          messages.show({ severity: 'success', detail: t('Registration successful. Go to login.'), sticky: true });
           reset();
           setSubmitting(false);
         }
@@ -59,7 +61,7 @@ const Register = (props) => {
           setError(errors);
         }
         else {
-          messages.show({ severity: 'error', detail: 'Something went wrong. Try again.', sticky: true });
+          messages.show({ severity: 'error', detail: t('Something went wrong. Try again.'), sticky: true });
         }
 
         setSubmitting(false);
@@ -76,46 +78,46 @@ const Register = (props) => {
             <Messages ref={(el) => messages = el} />
           </div>
           <div className="p-col-12">
-            <div className="p-card-title p-grid p-nogutter p-justify-between">Register
+            <div className="p-card-title p-grid p-nogutter p-justify-between">{t('Register')}
               <LocaleToggle />
             </div>
-            <div className="p-card-subtitle">Enter your info to register</div>
+            <div className="p-card-subtitle">{t('Enter your info to register')}</div>
           </div>
 
           <form onSubmit={handleSubmit(submitRegister)}>
             <div className="p-col-12 p-fluid">
               <div className="p-inputgroup">
                 <span className="p-inputgroup-addon"><i className="pi pi-user" /></span>
-                <input type="text" name="name" placeholder={'Name'} ref={register} className="p-inputtext p-component p-filled" />
+                <input type="text" name="name" placeholder={t('Name')} ref={register} className="p-inputtext p-component p-filled" />
               </div>
               <p className="text-error">{errors.name?.message}</p>
             </div>
             <div className="p-col-12 p-fluid">
               <div className="p-inputgroup">
                 <span className="p-inputgroup-addon"><i className="pi pi-envelope" /></span>
-                <input type="text" name="email" placeholder={'Email'} ref={register} className="p-inputtext p-component p-filled" />
+                <input type="text" name="email" placeholder={t('Email')} ref={register} className="p-inputtext p-component p-filled" />
               </div>
               <p className="text-error">{errors.email?.message}</p>
             </div>
             <div className="p-col-12 p-fluid">
               <div className="p-inputgroup">
                 <span className="p-inputgroup-addon"><i className="pi pi-key" /></span>
-                <input type="password" name="password" placeholder={'Password'} ref={register} className="p-inputtext p-component p-filled" />
+                <input type="password" name="password" placeholder={t('Password')} ref={register} className="p-inputtext p-component p-filled" />
               </div>
               <p className="text-error">{errors.password?.message}</p>
             </div>
             <div className="p-col-12 p-fluid">
               <div className="p-inputgroup">
                 <span className="p-inputgroup-addon"><i className="pi pi-key" /></span>
-                <input type="password" name="confirm_password" placeholder={'Confirm Password'} ref={register} className="p-inputtext p-component p-filled" />
+                <input type="password" name="confirm_password" placeholder={t('Confirm Password')} ref={register} className="p-inputtext p-component p-filled" />
               </div>
               <p className="text-error">{errors.confirm_password?.message}</p>
             </div>
             <div className="p-col-12 p-fluid">
-              <Button disabled={submitting} type="submit" label={'Register'} icon="pi pi-sign-in" className="p-button-raised" />
+              <Button disabled={submitting} type="submit" label={t('Register')} icon="pi pi-sign-in" className="p-button-raised" />
             </div>
             <div className="p-grid p-nogutter p-col-12 p-justify-center">
-              <Link to="/login">Login</Link>
+              <Link to="/login">{t('Login')}</Link>
             </div>
           </form>
         </Card>

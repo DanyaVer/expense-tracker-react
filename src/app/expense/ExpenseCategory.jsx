@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import * as yup from 'yup';
 import { Link } from "react-router-dom";
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
 
 import { Messages } from 'primereact/messages';
@@ -41,6 +42,8 @@ const expenseCategoryValidationSchema = yup.object().shape({
 
 const ExpenseCategory = (props) => {
 
+  const [t] = useTranslation();
+  
   const { register, handleSubmit, reset, errors, setError } = useForm({
     validationSchema: expenseCategoryValidationSchema
   });
@@ -84,12 +87,12 @@ const ExpenseCategory = (props) => {
   const deleteExpenseCategory = (data) => {
     // console.log(data);
     StyledSwal.fire({
-      title: 'Are you sure?',
-      text: `Confirm to delete expense category ${data.category_name}.`,
+      title: t('Are you sure?'),
+      text: `${t("Confirm to delete expense category")} ${data.category_name}.`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: '<span class="pi pi-trash p-button-icon-left"></span><span class="p-button-text">Delete</span>',
-      cancelButtonText: '<span class="pi pi-ban p-button-icon-left"></span><span class="p-button-text">No</span>',
+      confirmButtonText: `<span class="pi pi-trash p-button-icon-left"></span><span class="p-button-text">${t("Delete")}</span>`,
+      cancelButtonText: `<span class="pi pi-ban p-button-icon-left"></span><span class="p-button-text">${t("No")}</span>`,
       // confirmButtonColor: '#f76452',
       // cancelButtonColor: '#3085d6',
       focusConfirm: false,
@@ -105,7 +108,7 @@ const ExpenseCategory = (props) => {
 
               messages.show({
                 severity: 'success',
-                detail: 'Your expense category ' + data.category_name + ' deleted successfully.',
+                detail: t('Your expense category ') + data.category_name + t(' deleted successfully.'),
                 sticky: false,
                 closable: false,
                 life: 5000
@@ -119,7 +122,7 @@ const ExpenseCategory = (props) => {
               messages.clear();
               messages.show({
                 severity: 'error',
-                detail: 'Expense category ' + data.category_name + ' in use.',
+                detail: t('Expense category ') + data.category_name + t(' in use.'),
                 sticky: true,
                 closable: true,
                 life: 5000
@@ -130,7 +133,7 @@ const ExpenseCategory = (props) => {
               messages.clear();
               messages.show({
                 severity: 'error',
-                detail: 'Something went wrong. Try again.',
+                detail: t('Something went wrong. Try again.'),
                 sticky: true,
                 closable: true,
                 life: 5000
@@ -154,7 +157,7 @@ const ExpenseCategory = (props) => {
 
           messages.show({
             severity: 'success',
-            detail: 'New expense category ' + response.data.request.category_name + ' added.',
+            detail: t('New expense category ') + response.data.request.category_name + t(' added.'),
             sticky: false,
             closable: false,
             life: 5000
@@ -168,7 +171,7 @@ const ExpenseCategory = (props) => {
           messages.clear();
           messages.show({
             severity: 'error',
-            detail: 'Something went wrong. Try again.',
+            detail: t('Something went wrong. Try again.'),
             sticky: true,
             closable: true,
             life: 5000
@@ -188,7 +191,7 @@ const ExpenseCategory = (props) => {
 
   return (
     <div>
-      <Helmet title="Expense Category" />
+      <Helmet title={t("Expense Category")} />
 
       <div className="p-grid p-nogutter">
         <div className="p-col-12">
@@ -203,17 +206,17 @@ const ExpenseCategory = (props) => {
         <div className="p-col-12 p-md-6">
           <Card className="rounded-border">
             <div>
-              <div className="p-card-title p-grid p-nogutter p-justify-between">Add Expense Category</div>
-              <div className="p-card-subtitle">Enter expense category name below.</div>
+              <div className="p-card-title p-grid p-nogutter p-justify-between">{t("Add Expense Category")}</div>
+              <div className="p-card-subtitle">{t("Enter expense category name below.")}</div>
             </div>
             <br />
             <form onSubmit={handleSubmit(submitExpenseCategory)}>
               <div className="p-fluid">
-                <input type="text" ref={register} placeholder="Category name" name="category_name" className="p-inputtext p-component p-filled" />
+                <input type="text" ref={register} placeholder={t("Category name")} name="category_name" className="p-inputtext p-component p-filled" />
                 <p className="text-error">{errors.category_name?.message}</p>
               </div>
               <div className="p-fluid">
-                <Button disabled={submitting} type="submit" label="Add Category" icon="pi pi-plus"
+                <Button disabled={submitting} type="submit" label={t("Add Category")} icon="pi pi-plus"
                   className="p-button-raised" />
               </div>
             </form>
@@ -223,11 +226,11 @@ const ExpenseCategory = (props) => {
         <div className="p-col-12 p-md-6">
           <Card className="rounded-border">
             <div className='p-grid'>
-              <div className='p-col-6'>
-                <div className="p-card-title p-grid p-nogutter p-justify-between">View Expenses Categories</div>
-                <div className="p-card-subtitle">Here are list of expense categories.</div>
+              <div className='p-col-12'>
+                <div className="p-card-title p-grid p-nogutter p-justify-between">{t("View Expenses Categories")}</div>
+                <div className="p-card-subtitle">{t("Here are list of expense categories.")}</div>
               </div>
-              <div className="p-col-6" align="right">
+              <div className="p-col-12" align="center">
                 {expenseCategories.fetching ? <ProgressSpinner style={{ height: '25px', width: '25px' }} strokeWidth={'4'} /> : ''}
               </div>
             </div>
@@ -259,28 +262,28 @@ const ExpenseCategory = (props) => {
                   sortOrder: e.sortOrder,
                 })
               }}
-              className="text-center"
+              className="text-center custom-table"
             >
-              <Column field="id" header="Serial" sortable={true} />
-              <Column field="category_name" header="Category Name" sortable={true} />
+              <Column field="id" header={t("Serial")} sortable={true} />
+              <Column field="category_name" header={t("Category Name")} sortable={true} />
               <Column
                 body={(rowData, column) => {
                   // console.log(rowData);
                   return (
-                    <div>
-                      <Link to={`/expense/category/${rowData.id}/edit`}><Button label="Edit"
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: 5, flexWrap: 'wrap' }}>
+                      <Link to={`/expense/category/${rowData.id}/edit`}><Button label={t("Edit")}
                         value={rowData.id}
                         icon="pi pi-pencil"
                         className="p-button-raised p-button-rounded p-button-info" /></Link>
-                      <Button label="Delete"
+                      <Button label={t("Delete")}
                         onClick={() => deleteExpenseCategory(rowData)}
                         icon="pi pi-trash"
                         className="p-button-raised p-button-rounded p-button-danger" />
                     </div>
                   )
                 }}
-                header="Action"
-                style={{ textAlign: 'center', width: '8em' }}
+                header={t("Action")}
+                style={{ textAlign: 'center', width: 'auto' }}
               />
             </DataTable>
           </Card>

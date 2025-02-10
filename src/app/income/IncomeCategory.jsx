@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { Link } from "react-router-dom";
 import { useForm } from 'react-hook-form';
@@ -41,6 +42,8 @@ const incomeCategoryValidationSchema = yup.object().shape({
 
 const IncomeCategory = (props) => {
 
+  const [t] = useTranslation();
+  
   const { register, handleSubmit, reset, errors, setError } = useForm({
     validationSchema: incomeCategoryValidationSchema
   });
@@ -84,12 +87,12 @@ const IncomeCategory = (props) => {
   const deleteIncomeCategory = (data) => {
     // console.log(data);
     StyledSwal.fire({
-      title: 'Are you sure?',
-      text: `Confirm to delete income category ${data.category_name}.`,
+      title: t('Are you sure?'),
+      text: `${t("Confirm to delete income category")} ${data.category_name}.`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: '<span class="pi pi-trash p-button-icon-left"></span><span class="p-button-text">Delete</span>',
-      cancelButtonText: '<span class="pi pi-ban p-button-icon-left"></span><span class="p-button-text">No</span>',
+      confirmButtonText: `<span class="pi pi-trash p-button-icon-left"></span><span class="p-button-text">${t("Delete")}</span>`,
+      cancelButtonText: `<span class="pi pi-ban p-button-icon-left"></span><span class="p-button-text">${t("No")}</span>`,
       // confirmButtonColor: '#f76452',
       // cancelButtonColor: '#3085d6',
       focusConfirm: false,
@@ -105,7 +108,7 @@ const IncomeCategory = (props) => {
 
               messages.show({
                 severity: 'success',
-                detail: 'Your income category ' + data.category_name + ' deleted successfully.',
+                detail: t('Your income category ') + data.category_name + t(' deleted successfully.'),
                 sticky: false,
                 closable: false,
                 life: 5000
@@ -119,7 +122,7 @@ const IncomeCategory = (props) => {
               messages.clear();
               messages.show({
                 severity: 'error',
-                detail: 'Income category ' + data.category_name + ' in use.',
+                detail: t('Income category') + ' ' + data.category_name + t(' in use.'),
                 sticky: true,
                 closable: true,
                 life: 5000
@@ -130,7 +133,7 @@ const IncomeCategory = (props) => {
               messages.clear();
               messages.show({
                 severity: 'error',
-                detail: 'Something went wrong. Try again.',
+                detail: t('Something went wrong. Try again.'),
                 sticky: true,
                 closable: true,
                 life: 5000
@@ -155,7 +158,7 @@ const IncomeCategory = (props) => {
 
           messages.show({
             severity: 'success',
-            detail: 'New income category ' + response.data.request.category_name + ' added.',
+            detail: t('New income category ') + response.data.request.category_name + t(' added.'),
             sticky: false,
             closable: false,
             life: 5000
@@ -171,7 +174,7 @@ const IncomeCategory = (props) => {
           messages.clear();
           messages.show({
             severity: 'error',
-            detail: 'Something went wrong. Try again.',
+            detail: t('Something went wrong. Try again.'),
             sticky: true,
             closable: true,
             life: 5000
@@ -191,7 +194,7 @@ const IncomeCategory = (props) => {
 
   return (
     <div>
-      <Helmet title="Income Category" />
+      <Helmet title={t("Income Category")} />
 
       <div className="p-grid p-nogutter">
         <div className="p-col-12">
@@ -206,17 +209,17 @@ const IncomeCategory = (props) => {
         <div className="p-col-12 p-md-6">
           <Card className="rounded-border">
             <div>
-              <div className="p-card-title p-grid p-nogutter p-justify-between">Add Income Category</div>
-              <div className="p-card-subtitle">Enter income category name below.</div>
+              <div className="p-card-title p-grid p-nogutter p-justify-between">{t("Add Income Category")}</div>
+              <div className="p-card-subtitle">{t("Enter income category name below.")}</div>
             </div>
             <br />
             <form onSubmit={handleSubmit(submitIncomeCategory)}>
               <div className="p-fluid">
-                <input type="text" ref={register} placeholder="Category name" name="category_name" className="p-inputtext p-component p-filled" />
+                <input type="text" ref={register} placeholder={t("Category name")} name="category_name" className="p-inputtext p-component p-filled" />
                 <p className="text-error">{errors.category_name?.message}</p>
               </div>
               <div className="p-fluid">
-                <Button disabled={submitting} type="submit" label="Add Category" icon="pi pi-plus"
+                <Button disabled={submitting} type="submit" label={t("Add Category")} icon="pi pi-plus"
                   className="p-button-raised" />
               </div>
             </form>
@@ -227,8 +230,8 @@ const IncomeCategory = (props) => {
           <Card className="rounded-border">
             <div className='p-grid'>
               <div className='p-col-6'>
-                <div className="p-card-title p-grid p-nogutter p-justify-between">View Incomes Categories</div>
-                <div className="p-card-subtitle">Here are list of income categories.</div>
+                <div className="p-card-title p-grid p-nogutter p-justify-between">{t("View Incomes Categories")}</div>
+                <div className="p-card-subtitle">{t("Here are list of income categories.")}</div>
               </div>
               <div className="p-col-6" align="right">
                 {incomeCategories.fetching ? <ProgressSpinner style={{ height: '25px', width: '25px' }} strokeWidth={'4'} /> : ''}
@@ -262,7 +265,7 @@ const IncomeCategory = (props) => {
                   sortOrder: e.sortOrder,
                 })
               }}
-              className="text-center"
+              className="text-center custom-table"
             >
               <Column field="id" header="Serial" sortable={true} />
               <Column field="category_name" header="Category Name" sortable={true} />
@@ -270,12 +273,12 @@ const IncomeCategory = (props) => {
                 body={(rowData, column) => {
                   // console.log(rowData);
                   return (
-                    <div>
-                      <Link to={`/income/category/${rowData.id}/edit`}><Button label="Edit"
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: 5, flexWrap: 'wrap' }}>
+                      <Link to={`/income/category/${rowData.id}/edit`}><Button label={t("Edit")}
                         value={rowData.id}
                         icon="pi pi-pencil"
                         className="p-button-raised p-button-rounded p-button-info" /></Link>
-                      <Button label="Delete"
+                      <Button label={t("Delete")}
                         onClick={() => deleteIncomeCategory(rowData)}
                         icon="pi pi-trash"
                         className="p-button-raised p-button-rounded p-button-danger" />
@@ -283,7 +286,7 @@ const IncomeCategory = (props) => {
                   )
                 }}
                 header="Action"
-                style={{ textAlign: 'center', width: '8em' }}
+                style={{ textAlign: 'center', width: 'auto' }}
               />
             </DataTable>
           </Card>

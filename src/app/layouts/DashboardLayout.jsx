@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import classNames from 'classnames';
 import { Route, Switch } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { ScrollPanel } from 'primereact/scrollpanel';
 
@@ -29,41 +30,75 @@ import PageNotFound from './../errors/404';
 import { logout } from './../../Axios';
 import { PrivateRoute } from './../../Routes';
 import { useTracked } from './../../Store';
+import EditReceipt from '../receipt/EditReceipt';
+import Receipt from '../receipt/Receipt';
+import CreateReceipt from '../receipt/CreateReceipt';
+import ReceiptDetails from '../receipt/ReceiptDetails';
 
-const isDesktop = () => {
-  return window.innerWidth > 1024;
+const isDesktop = (width) => {
+  return (width || window.innerWidth) > 1024;
 };
 
-const menu = [
-  { label: 'Dashboard', url: '/dashboard', icon: 'pi pi-fw pi-home', command: () => { } },
-  {
-    label: 'Expense', url: '', icon: 'pi pi-fw pi-dollar',
-    items: [
-      { label: 'Manage', url: '/expense', icon: 'pi pi-fw pi-plus', command: () => { } },
-      { label: 'Category', url: '/expense/category', icon: 'pi pi-fw pi-list', command: () => { } },
-    ]
-  },
-  {
-    label: 'Income', url: '', icon: 'pi pi-fw pi-money-bill',
-    items: [
-      { label: 'Manage', url: '/income', icon: 'pi pi-fw pi-plus', command: () => { } },
-      { label: 'Category', url: '/income/category', icon: 'pi pi-fw pi-list', command: () => { } },
-    ]
-  },
-  { label: 'Calendar', url: '/calendar', icon: 'pi pi-fw pi-calendar', command: () => { } },
-  { label: 'Analytics', url: '/analytics', icon: 'pi pi-fw pi-chart-bar', command: () => { } },
-  { label: 'Settings', url: '/setting', icon: 'pi pi-fw pi-cog', command: () => { } },
-  { label: 'Profile', url: '/profile', icon: 'pi pi-fw pi-user', command: () => { } },
-  { label: 'Logout', url: '', icon: 'pi pi-fw pi-power-off', command: () => logout() },
-];
-
 const DashboardLayout = (props) => {
+
+  const [t] = useTranslation();
+  
+  const menu = [
+    { label: t('Dashboard'), url: '/dashboard', icon: 'pi pi-fw pi-home', command: () => { } },
+    { label: t('Receipt'), url: '/receipt', icon: 'pi pi-fw pi-plus', command: () => { } },
+    {
+      label: t('Expense'), url: '', icon: 'pi pi-fw pi-dollar',
+      items: [
+        { label: t('Manage'), url: '/expense', icon: 'pi pi-fw pi-plus', command: () => { } },
+        { label: t('Category'), url: '/expense/category', icon: 'pi pi-fw pi-list', command: () => { } },
+      ]
+    },
+    // {
+    //   label: t('Income'), url: '', icon: 'pi pi-fw pi-money-bill',
+    //   items: [
+    //     { label: t('Manage'), url: '/income', icon: 'pi pi-fw pi-plus', command: () => { } },
+    //     { label: t('Category'), url: '/income/category', icon: 'pi pi-fw pi-list', command: () => { } },
+    //   ]
+    // },
+    { label: t('Calendar'), url: '/calendar', icon: 'pi pi-fw pi-calendar', command: () => { } },
+    { label: t('Analytics'), url: '/analytics', icon: 'pi pi-fw pi-chart-bar', command: () => { } },
+    { label: t('Settings'), url: '/setting', icon: 'pi pi-fw pi-cog', command: () => { } },
+    { label: t('Profile'), url: '/profile', icon: 'pi pi-fw pi-user', command: () => { } },
+    { label: t('Logout'), url: '', icon: 'pi pi-fw pi-power-off', command: () => logout() },
+  ];
 
   const [state] = useTracked();
 
   const [staticMenuInactive, setStaticMenuInactive] = useState(false);
   const [overlayMenuActive, setOverlayMenuActive] = useState(false);
   const [mobileMenuActive, setMobileMenuActive] = useState(false);
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      let isDesktopNow = isDesktop();
+
+      if (isDesktop(windowWidth) !== isDesktopNow) {
+        if (mobileMenuActive && isDesktopNow) {
+          setMobileMenuActive(false);
+        }
+        if (overlayMenuActive && !isDesktopNow) {
+          setOverlayMenuActive(false);
+        }
+      }
+
+      setWindowWidth(window.innerWidth);
+    };
+
+    // Add event listener
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [windowWidth]); 
 
   const onToggleMenu = () => {
     if (isDesktop()) {
@@ -86,9 +121,13 @@ const DashboardLayout = (props) => {
    */
   const onMenuItemClick = (event) => {
     if (!event.item.items) {
-      setOverlayMenuActive(false);
-      setMobileMenuActive(false);
+      setMenuInactive();
     }
+  }
+
+  const setMenuInactive = () => {
+    setOverlayMenuActive(false);
+    setMobileMenuActive(false);
   }
 
   let logo = state.layoutColorMode === 'dark' ? require('./../../assets/logo-sidebar.png') : require('./../../assets/logo-sidebar.png');
@@ -119,6 +158,10 @@ const DashboardLayout = (props) => {
       <div className="layout-main" style={{ minHeight: '100vh', marginBottom: '-55px' }}>
         <Switch>
           <PrivateRoute exact strict path={'/dashboard'} component={Dashboard} />
+          <PrivateRoute exact strict path={'/receipt'} component={Receipt} />
+          <PrivateRoute exact strict path={'/receipt/create'} component={CreateReceipt} />
+          <PrivateRoute exact strict path={'/receipt/:receipt_id'} component={ReceiptDetails} />
+          <PrivateRoute exact strict path={'/receipt/:receipt_id/edit'} component={EditReceipt} />
           <PrivateRoute exact strict path={'/expense'} component={Expense} />
           <PrivateRoute exact strict path={'/expense/:expense_id/edit'} component={EditExpense} />
           <PrivateRoute exact strict path={'/expense/category'} component={ExpenseCategory} />
@@ -140,7 +183,7 @@ const DashboardLayout = (props) => {
         <ScrollToTop />
       </div>
       <AppFooter />
-      <div className="layout-mask" />
+      <div className="layout-mask" onClick={setMenuInactive} />
     </div>
   );
 }

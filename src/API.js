@@ -44,3 +44,8 @@ export const chartApiEndpoints = {
   incomeExpenseMonthWise: '/api/v1/chart/income-expense/month-wise',
   incomeExpenseCategoryWise: '/api/v1/chart/income-expense/category-wise',
 };
+
+export const receiptApiEndpoints = {
+  receipt: '/api/v1/receipt',
+  parseImage: '/api/v1/receipt/parser/parse-image-test'
+};

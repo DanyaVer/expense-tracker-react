@@ -11,7 +11,7 @@ const LocaleToggle = (props) => {
   const [t, i18n] = useTranslation();
 
   const toggleLanguage = useCallback(() => {
-    i18n.language === 'en' ? i18n.changeLanguage('bn') : i18n.changeLanguage('en')
+    i18n.language === 'en' ? i18n.changeLanguage('uk') : i18n.changeLanguage('en')
     setItem('language', i18n.language);
   }, [i18n]);
 
@@ -19,7 +19,7 @@ const LocaleToggle = (props) => {
     <Button type="button" onClick={toggleLanguage}
       label={t('lng')} icon="pi pi-globe"
       className={props.className ? props.className : "p-button-raised p-button-rounded p-button-secondary"}
-      style={{ width: '100px' }} />
+      style={{ width: 'auto' }} />
   );
 };
 

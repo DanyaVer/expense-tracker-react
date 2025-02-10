@@ -8,7 +8,7 @@ const globalState = {
   layoutMode: 'static',
   layoutColorMode: 'dark',
   currencies: [],
-  currentCurrency: null,
+  currentCurrency: {currency_code: 'UAH', currency_name: 'Hryvnia', country: 'UKRAINE' },
   user: null
 };
 

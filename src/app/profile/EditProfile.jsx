@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Helmet } from 'react-helmet';
 import { useForm, Controller } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { Messages } from 'primereact/messages';
@@ -22,6 +24,10 @@ let messages; // For alert message
 
 const EditProfile = (props) => {
 
+  const [t] = useTranslation();
+  
+  const history = useHistory();
+  
   const [state, setState] = useTracked();
   const { register, handleSubmit, errors, setValue, setError, control } = useForm({
     validationSchema: updateProfileValidationSchema
@@ -70,7 +76,7 @@ const EditProfile = (props) => {
         if (error.response.status === 401) {
           messages.show({
             severity: 'error',
-            detail: 'Something went wrong. Try again.',
+            detail: t('Something went wrong. Try again.'),
             sticky: true,
             closable: true,
             life: 5000
@@ -100,11 +106,13 @@ const EditProfile = (props) => {
 
           messages.show({
             severity: 'success',
-            detail: 'Your profile info updated successfully.',
+            detail: t('Your profile info updated successfully.'),
             sticky: false,
             closable: false,
             life: 5000
           });
+
+          history.goBack();
         }
 
       })
@@ -124,7 +132,7 @@ const EditProfile = (props) => {
         else if (error.response.status === 401) {
           messages.show({
             severity: 'error',
-            detail: 'Something went wrong. Try again.',
+            detail: t('Something went wrong. Try again.'),
             sticky: true,
             closable: true,
             life: 5000
@@ -136,7 +144,7 @@ const EditProfile = (props) => {
 
   return (
     <div>
-      <Helmet title="Edit Profile" />
+      <Helmet title={t("Edit Profile")} />
 
       <div className="p-grid p-nogutter">
         <div className="p-col-12">
@@ -151,23 +159,23 @@ const EditProfile = (props) => {
         <div className="p-col-12">
           <Card className="rounded-border">
             <div>
-              <div className="p-card-title p-grid p-nogutter p-justify-between">Edit Profile</div>
-              <div className="p-card-subtitle">Edit current profile information below.</div>
+              <div className="p-card-title p-grid p-nogutter p-justify-between">{t("Edit Profile")}</div>
+              <div className="p-card-subtitle">{t("Edit current profile information below.")}</div>
             </div>
             <br />
             <form onSubmit={handleSubmit(submitUpdateProfile)}>
               <div className="p-fluid">
-                <label htmlFor="name">Name</label>
+                <label htmlFor="name">{t("Name")}</label>
                 <input type="text" name="name" ref={register} className="p-inputtext p-component p-filled" />
                 <p className="text-error">{errors.name?.message}</p>
               </div>
               <div className="p-fluid">
-                <label htmlFor="email">Email</label>
+                <label htmlFor="email">{t("Email")}</label>
                 <input type="text" name="email" ref={register} className="p-inputtext p-component p-filled" />
                 <p className="text-error">{errors.email?.message}</p>
               </div>
               <div className="p-fluid">
-                <label>Currency</label>
+                <label>{t("Currency")}</label>
                 <Controller
                   name="currency"
                   onChange={([e]) => {
@@ -180,13 +188,13 @@ const EditProfile = (props) => {
                     <Dropdown
                       filter={true}
                       filterBy="currency_code,currency_name"
-                      filterPlaceholder="Search here"
+                      filterPlaceholder={t("Search here")}
                       showClear={true}
                       filterInputAutoFocus={false}
                       options={state.currencies}
                       style={{ width: '100%' }}
                       itemTemplate={currencyTemplate}
-                      placeholder="Select a currency"
+                      placeholder={t("Select a currency")}
                       optionLabel="currency_code"
                     />
                   }
@@ -194,7 +202,7 @@ const EditProfile = (props) => {
                 <p className="text-error">{errors.currency?.message}</p>
               </div>
               <div className="p-fluid">
-                <Button disabled={submitting} type="submit" label="Update Profile" icon="pi pi-refresh" className="p-button-raised" />
+                <Button disabled={submitting} type="submit" label={t("Update Profile")} icon="pi pi-refresh" className="p-button-raised" />
               </div>
             </form>
           </Card>

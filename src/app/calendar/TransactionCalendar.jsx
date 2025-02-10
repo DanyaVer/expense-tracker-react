@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet';
+import { useTranslation } from 'react-i18next';
 
 import { Messages } from 'primereact/messages';
 import { Card } from 'primereact/card';
@@ -20,6 +21,8 @@ let messages;
 
 const TransactionCalendar = (props) => {
 
+  const [t] = useTranslation();
+  
   const [events, setEvents] = useState({ events: [], eventsLoading: true });
   const [transactionsByDate, setTransactionByDate] = useState({ transactions: [], transactionsLoading: true });
   const [modalVisible, setModalVisible] = useState(false);
@@ -36,11 +39,11 @@ const TransactionCalendar = (props) => {
     height: 'auto',
     titleFormat: { year: 'numeric', month: 'long' },
     buttonText: {
-      today: 'Today',
-      month: 'Month',
-      week: 'Week',
-      day: 'Day',
-      list: 'List'
+      today: t('Today'),
+      month: t('Month'),
+      week: t('Week'),
+      day: t('Day'),
+      list: t('List')
     },
     header: {
       left: 'dayGridMonth,listWeek', // timeGridWeek,timeGridDay
@@ -78,7 +81,7 @@ const TransactionCalendar = (props) => {
       else {
         return (
           <div className="p-grid p-nogutter p-justify-center">
-            <h4 className="color-subtitle">Failed to retrieve data.</h4>
+            <h4 className="color-subtitle">{t('Failed to retrieve data.')}</h4>
           </div>
         );
       }
@@ -163,7 +166,7 @@ const TransactionCalendar = (props) => {
       </div>
 
       <Dialog
-        header="Transaction Detail"
+        header={t("Transaction Detail")}
         visible={modalVisible}
         style={{ width: '80%' }}
         modal={true}
@@ -188,11 +191,11 @@ const TransactionCalendar = (props) => {
         <div className="p-col-12">
           <Card className="rounded-border">
             <div className='p-grid'>
-              <div className='p-col-6'>
-                <div className="p-card-title p-grid p-nogutter p-justify-between">Transactions +/-</div>
-                <div className="p-card-subtitle">Detail of your daily incomes and expenses.</div>
+              <div className='p-col-12'>
+                <div className="p-card-title p-grid p-nogutter p-justify-between">{t('Transactions +/-')}</div>
+                <div className="p-card-subtitle">{t('Detail of your daily incomes and expenses.')}</div>
               </div>
-              <div className="p-col-6" align="right">
+              <div className="p-col-12" align="center">
                 {events.eventsLoading ? <ProgressSpinner style={{ height: '25px', width: '25px' }} strokeWidth={'4'} /> : ''}
               </div>
             </div>

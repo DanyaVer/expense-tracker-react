@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Sidebar } from 'primereact/sidebar';
 import { ListBox } from 'primereact/listbox';
@@ -10,6 +11,8 @@ import axios from './../../Axios';
 
 const CurrencySidebar = (props) => {
 
+  const [t] = useTranslation();
+  
   const [state, setState] = useTracked();
 
   useEffect(() => {
@@ -20,10 +23,9 @@ const CurrencySidebar = (props) => {
     if (state.currencies.length === 0) {
       axios.get(currencyApiEndpoints.currency, {})
         .then(response => {
-          // console.log(response.data);
           if (response.data.data.length > 0) {
-            let currency = response.data.data.find(el => el.id === state.user.currency_id ? el : null);
-
+            let currencyId = parseInt(state.user.currency_id, 10);
+            let currency = response.data.data.find(el => el.id === currencyId);
             setState(prev => ({ ...prev, currencies: response.data.data, currentCurrency: currency }));
           }
         })
@@ -35,7 +37,7 @@ const CurrencySidebar = (props) => {
 
   return (
     <Sidebar visible={props.visible} position="right" onHide={props.onHide} style={{ width: '345px' }}>
-      <h1 className="p-card-title">Currencies</h1>
+      <h1 className="p-card-title">{t('Currencies')}</h1>
       {
         state.currencies.length === 0 ?
           <div className="p-grid p-justify-center p-align-center" style={{ height: '86vh' }}>
@@ -50,13 +52,15 @@ const CurrencySidebar = (props) => {
             dataKey="currency_code"
             optionLabel="currency_code"
             onChange={(e) => {
-              // console.log(e.value);
-              setState(prev => ({ ...prev, currentCurrency: e.value }));
+              if (e.value)
+                setState(prev => ({ ...prev, currentCurrency: e.value }));
             }}
             itemTemplate={(item) => {
               return (
                 <div className="p-clearfix">
-                  <span className="color-highlight text-bold">{item.currency_code}</span> <span style={{ fontSize: '12px', fontWeight: 'bold' }}>{item.country}</span>
+                  <span className="color-highlight text-bold">{item.currency_code}</span> 
+                  {' '}
+                  <span className="word-break" style={{ fontSize: '12px', fontWeight: 'bold' }}>{item.country}</span>
                 </div>
               )
             }}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import * as dayjs from 'dayjs';
 import Swal from 'sweetalert2';
@@ -50,6 +51,8 @@ const addIncomeValidationSchema = yup.object().shape({
 
 const Income = (props) => {
 
+  const [t] = useTranslation();
+  
   const [state] = useTracked();
   const { register, handleSubmit, setValue, errors, setError, reset, control } = useForm({
     validationSchema: addIncomeValidationSchema
@@ -129,12 +132,12 @@ const Income = (props) => {
   const deleteIncome = (data) => {
     // console.log(data);
     StyledSwal.fire({
-      title: 'Are you sure?',
-      text: `Confirm to delete income on ${data.spent_on}.`,
+      title: t('Are you sure?'),
+      text: `${t("Confirm to delete income on")} ${data.spent_on}.`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: '<span class="pi pi-trash p-button-icon-left"></span><span class="p-button-text">Delete</span>',
-      cancelButtonText: '<span class="pi pi-ban p-button-icon-left"></span><span class="p-button-text">No</span>',
+      confirmButtonText: `<span class="pi pi-trash p-button-icon-left"></span><span class="p-button-text">${t("Delete")}</span>`,
+      cancelButtonText: `<span class="pi pi-ban p-button-icon-left"></span><span class="p-button-text">${t("No")}</span>`,
       // confirmButtonColor: '#f76452',
       // cancelButtonColor: '#3085d6',
       focusConfirm: false,
@@ -152,7 +155,7 @@ const Income = (props) => {
 
                 messages.show({
                   severity: 'success',
-                  detail: 'Your income on ' + data.spent_on + ' deleted successfully.',
+                  detail: t('Your income on ') + data.spent_on + t(' deleted successfully.'),
                   sticky: false,
                   closable: false,
                   life: 5000
@@ -167,7 +170,7 @@ const Income = (props) => {
                 messages.clear();
                 messages.show({
                   severity: 'error',
-                  detail: 'Something went wrong. Try again.',
+                  detail: t('Something went wrong. Try again.'),
                   sticky: true,
                   closable: true,
                   life: 5000
@@ -197,7 +200,7 @@ const Income = (props) => {
 
           messages.show({
             severity: 'success',
-            detail: 'Your income on ' + response.data.request.spent_on + ' added.',
+            detail: t('Your income on ') + response.data.request.spent_on + t(' added.'),
             sticky: false,
             closable: false,
             life: 5000
@@ -211,7 +214,7 @@ const Income = (props) => {
           messages.clear();
           messages.show({
             severity: 'error',
-            detail: 'Something went wrong. Try again.',
+            detail: t('Something went wrong. Try again.'),
             sticky: true,
             closable: true,
             life: 5000
@@ -239,7 +242,7 @@ const Income = (props) => {
     }
     else {
       return <div>
-        <div className="text-center">No income data found.</div>
+        <div className="text-center">{t("No income data found.")}</div>
         <hr />
       </div>
     }
@@ -266,7 +269,7 @@ const Income = (props) => {
             <div className="p-grid">
               <div className="p-col-6">
                 <div className="p-panel p-component">
-                  <div className="p-panel-titlebar"><span className="color-title text-bold">Income This Month</span>
+                  <div className="p-panel-titlebar"><span className="color-title text-bold">{t("Income This Month")}</span>
                   </div>
                   <div className="p-panel-content-wrapper p-panel-content-wrapper-expanded" id="pr_id_1_content"
                     aria-labelledby="pr_id_1_label" aria-hidden="false">
@@ -279,7 +282,7 @@ const Income = (props) => {
 
               <div className="p-col-6">
                 <div className="p-panel p-component">
-                  <div className="p-panel-titlebar"><span className="color-title text-bold">Income Today</span></div>
+                  <div className="p-panel-titlebar"><span className="color-title text-bold">{t("Income Today")}</span></div>
                   <div className="p-panel-content-wrapper p-panel-content-wrapper-expanded" id="pr_id_1_content"
                     aria-labelledby="pr_id_1_label" aria-hidden="false">
                     <div className="p-panel-content">
@@ -299,8 +302,8 @@ const Income = (props) => {
         <div className="p-col-12 p-md-6">
           <Card className="rounded-border">
             <div>
-              <div className="p-card-title p-grid p-nogutter p-justify-between">Add Income</div>
-              <div className="p-card-subtitle">Add your income information below.</div>
+              <div className="p-card-title p-grid p-nogutter p-justify-between">{t("Add Income")}</div>
+              <div className="p-card-subtitle">{t("Add your income information below.")}</div>
             </div>
             <br />
             <form onSubmit={handleSubmit(submitIncome)}>
@@ -341,7 +344,7 @@ const Income = (props) => {
                       filterInputAutoFocus={false}
                       options={incomeCategories}
                       style={{ width: '100%' }}
-                      placeholder="Income Category"
+                      placeholder={t("Income Category")}
                       optionLabel="category_name"
                     />
                   }
@@ -349,25 +352,25 @@ const Income = (props) => {
                 <p className="text-error">{errors.category?.message}</p>
               </div>
               <div className="p-fluid">
-                <input type="text" ref={register} placeholder="Income Source" name="source" className="p-inputtext p-component p-filled" />
+                <input type="text" ref={register} placeholder={t("Income Source")} name="source" className="p-inputtext p-component p-filled" />
                 <p className="text-error">{errors.source?.message}</p>
               </div>
               <div className="p-fluid">
                 <div className="p-inputgroup">
-                  <input type="number" step="0.00" ref={register} keyfilter="money" placeholder="Amount" name="amount" className="p-inputtext p-component p-filled" />
+                  <input type="number" step="0.00" ref={register} keyfilter="money" placeholder={t("Amount")} name="amount" className="p-inputtext p-component p-filled" />
                   <Button
-                    label={`${state.currencies.length === 0 ? 'loading' : state.currentCurrency.currency_code}`}
+                    label={`${state.currencies.length === 0 ? t('loading') : state.currentCurrency.currency_code}`}
                     type="button"
                     onClick={(e) => setCurrencyVisible(true)} />
                 </div>
                 <p className="text-error">{errors.amount?.message}</p>
               </div>
               <div className="p-fluid">
-                <textarea ref={register} rows={5} placeholder="Income Notes" name="notes" className="p-inputtext p-inputtextarea p-component p-inputtextarea-resizable" />
+                <textarea ref={register} rows={5} placeholder={t("Income Notes")} name="notes" className="p-inputtext p-inputtextarea p-component p-inputtextarea-resizable" />
                 <p className="text-error">{errors.notes?.message}</p>
               </div>
               <div className="p-fluid">
-                <Button disabled={submitting} type="submit" label="Add Income" icon="pi pi-plus"
+                <Button disabled={submitting} type="submit" label={t("Add Income")} icon="pi pi-plus"
                   className="p-button-raised" />
               </div>
             </form>
@@ -377,11 +380,11 @@ const Income = (props) => {
         <div className="p-col-12 p-md-6">
           <Card className="rounded-border">
             <div className='p-grid'>
-              <div className='p-col-6'>
-                <div className="p-card-title p-grid p-nogutter p-justify-between">View Incomes</div>
-                <div className="p-card-subtitle">Here are few incomes you've added.</div>
+              <div className='p-col-12'>
+                <div className="p-card-title p-grid p-nogutter p-justify-between">{t("View Incomes")}</div>
+                <div className="p-card-subtitle">{t("Here are few incomes you've added.")}</div>
               </div>
-              <div className="p-col-6" align="right">
+              <div className="p-col-12" align="center">
                 {income.fetching ? <ProgressSpinner style={{ height: '25px', width: '25px' }} strokeWidth={'4'} /> : ''}
               </div>
             </div>
@@ -413,7 +416,7 @@ const Income = (props) => {
                   sortOrder: e.sortOrder,
                 });
               }}
-              className="text-center"
+              className="text-center custom-table"
             >
               <Column field="id" header="Serial" sortable={true} />
               <Column field="source" header="Source" sortable={true} />
@@ -431,13 +434,13 @@ const Income = (props) => {
                 body={(rowData, column) => {
                   // console.log(rowData);
                   return (
-                    <div>
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: 5, flexWrap: 'wrap' }}>
                       <Link to={`/income/${rowData.id}/edit`}>
-                        <Button label="Edit" value={rowData.id}
+                        <Button label={t("Edit")} value={rowData.id}
                           icon="pi pi-pencil"
                           className="p-button-raised p-button-rounded p-button-info" />
                       </Link>
-                      <Button label="Delete"
+                      <Button label={t("Delete")}
                         onClick={() => deleteIncome(rowData)}
                         icon="pi pi-trash"
                         className="p-button-raised p-button-rounded p-button-danger" />
@@ -445,7 +448,7 @@ const Income = (props) => {
                   )
                 }}
                 header="Action"
-                style={{ textAlign: 'center', width: '8em' }}
+                style={{ textAlign: 'center', width: 'auto' }}
               />
             </DataTable>
           </Card>
