@@ -45,7 +45,7 @@ const DashboardLayout = (props) => {
   
   const menu = [
     { label: t('Dashboard'), url: '/dashboard', icon: 'pi pi-fw pi-home', command: () => { } },
-    { label: t('Receipt'), url: '/receipt', icon: 'pi pi-fw pi-plus', command: () => { } },
+    { label: t('Receipt'), url: '/receipt', icon: 'pi pi-fw pi-file', command: () => { } },
     {
       label: t('Expense'), url: '', icon: 'pi pi-fw pi-dollar',
       items: [

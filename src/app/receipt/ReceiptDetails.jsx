@@ -48,7 +48,7 @@ const ReceiptDetails = (props) => {
         <div className="p-card-title">{t("Expenses")}</div>
         { receipt.expenses && receipt.expenses.length > 0 ? (
           <DataTable value={receipt.expenses} responsive={true}>
-            <Column field="id" header={t("ID")} sortable={true} />
+            <Column field="id" header={t("Serial")} sortable={true} />
             <Column field="spent_on" header={t("Spent On")} sortable={true} />
             <Column 
               field="amount" 
