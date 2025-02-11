@@ -47,5 +47,5 @@ export const chartApiEndpoints = {
 
 export const receiptApiEndpoints = {
   receipt: '/api/v1/receipt',
-  parseImage: '/api/v1/receipt/parser/parse-image-test'
+  parseImage: '/api/v1/receipt/parser/parse-image'
 };

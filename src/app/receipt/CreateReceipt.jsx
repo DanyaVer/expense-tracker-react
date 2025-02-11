@@ -204,9 +204,9 @@ const CreateReceipt = (props) => {
           receipt_number: parsedData.receipt_number,
           total: parsedData.total,
           store: parsedData.store,
-          payment_type: parsedData.payment_type,
           expenses: newExpenses
         });
+        setPaymentType(parsedData.payment_type)
         messages.show({
           severity: 'success',
           detail: t('Image processed successfully.'),
@@ -216,6 +216,7 @@ const CreateReceipt = (props) => {
         });
       })
       .catch(error => {
+        console.error(error);
         setImageLoading(false);
         messages.show({
           severity: 'error',
@@ -252,7 +253,7 @@ const CreateReceipt = (props) => {
       receipt_number: data.receipt_number,
       total: data.total,
       store: data.store,
-      payment_type: data.payment_type,
+      payment_type: paymentType,
       currency_id: state.currentCurrency.id,
       expenses: processedExpenses
     };

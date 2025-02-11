@@ -101,7 +101,7 @@ const Receipt = (props) => {
               requestReceipts();
               messages.show({
                 severity: 'success',
-                detail: t('Receipt') + ' ' + receiptData.receipt_number + ' ' + t('deleted successfully.'),
+                detail: t('Receipt') + ' ' + receiptData.receipt_number + ' ' + t(' deleted successfully.'),
                 sticky: false,
                 closable: false,
                 life: 5000
@@ -193,7 +193,6 @@ const Receipt = (props) => {
             body={(rowData) => rowData.total.toLocaleString()} 
           />
           <Column field="store" header={t("Store")} sortable={true} />
-          <Column field="payment_type" header={t("Payment")} sortable={true} />
           <Column 
             header={t("Action")}
             body={(rowData) => (
