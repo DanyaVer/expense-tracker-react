@@ -203,9 +203,13 @@ export default {
     "No expenses found for this receipt.": "Витрати для цього чека не знайдено.",
     "Confirm to delete receipt": "Підтвердьте видалення чека",
     "Receipts": "Чеки",
+    "Receipt": "Чек",
     "List of receipts with related expenses.": "Список чеків з відповідними витратами.",
     "Add Receipt": "Додати чек",
     "View": "Перегляд",
     "Receipt Details": "Деталі чека",
+    "Payment Type": "Тип оплати",
+    "Cash": "Готівка",
+    "Card": "Картка",
   }
 }

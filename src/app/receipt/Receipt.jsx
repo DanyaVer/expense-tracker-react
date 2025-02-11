@@ -193,6 +193,7 @@ const Receipt = (props) => {
             body={(rowData) => rowData.total.toLocaleString()} 
           />
           <Column field="store" header={t("Store")} sortable={true} />
+          <Column field="payment_type" header={t("Payment")} sortable={true} />
           <Column 
             header={t("Action")}
             body={(rowData) => (

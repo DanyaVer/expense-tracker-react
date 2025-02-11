@@ -204,9 +204,13 @@ export default {
     "No expenses found for this receipt.": "No expenses found for this receipt.",
     "Confirm to delete receipt": "Confirm to delete receipt",
     "Receipts": "Receipts",
+    "Receipt": "Receipt",
     "List of receipts with related expenses.": "List of receipts with related expenses.",
     "Add Receipt": "Add Receipt",
     "View": "View",
     "Receipt Details": "Receipt Details",
+    "Cash": "Cash",
+    "Card": "Card",
+    "Payment Type": "Payment Type",
   }
 }

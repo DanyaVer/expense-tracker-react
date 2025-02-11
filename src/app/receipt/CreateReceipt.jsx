@@ -124,6 +124,7 @@ const CreateReceipt = (props) => {
       receipt_number: '',
       total: '',
       store: '',
+      payment_type: 'Card',
       expenses: [] 
     }
   });
@@ -144,6 +145,7 @@ const CreateReceipt = (props) => {
   const [receiptImage, setReceiptImage] = useState(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
   const [imageLoading, setImageLoading] = useState(false);
+  const [paymentType, setPaymentType] = useState("Card");
 
   // Load expense categories once.
   useEffect(() => {
@@ -156,6 +158,10 @@ const CreateReceipt = (props) => {
       })
       .catch(error => console.error(error));
   }, []);
+
+  const togglePayment = () => {
+    setPaymentType((prev) => (prev === 'Cash' ? 'Card' : 'Cash'));
+  };
 
   // onFileSelected handler for FileUploader.
   const handleFileSelected = (file) => {
@@ -198,6 +204,7 @@ const CreateReceipt = (props) => {
           receipt_number: parsedData.receipt_number,
           total: parsedData.total,
           store: parsedData.store,
+          payment_type: parsedData.payment_type,
           expenses: newExpenses
         });
         messages.show({
@@ -245,6 +252,7 @@ const CreateReceipt = (props) => {
       receipt_number: data.receipt_number,
       total: data.total,
       store: data.store,
+      payment_type: data.payment_type,
       currency_id: state.currentCurrency.id,
       expenses: processedExpenses
     };
@@ -319,6 +327,23 @@ const CreateReceipt = (props) => {
           <label>{t('Store')}</label>
           <input type="text" ref={register} name="store" className="p-inputtext p-component p-filled" placeholder={t('Store')} />
           <p className="text-error">{errors.store?.message}</p>
+        </div>
+        <div className="p-grid p-nogutter p-justify-between">
+            <label className="color-title p-col-4">
+                {t("Payment Type")}:
+            </label>
+            <h3 className="color-highlight p-col-4">
+                {t(paymentType)}
+            </h3>
+            <h3>
+                <Button 
+                    label={t("Toggle")} 
+                    icon="pi pi-refresh"
+                    className="p-button-rounded p-button-raised p-button-secondary"
+                    type="button"
+                    onClick={togglePayment} 
+                />
+            </h3>
         </div>
         <hr />
         <div className="p-fluid">

@@ -39,6 +39,7 @@ const EditReceipt = (props) => {
     const [receipt, setReceipt] = useState(null);
     const [state] = useTracked();
     const [currencyVisible, setCurrencyVisible] = useState(false);
+    const [paymentType, setPaymentType] = useState("Card");
 
     useEffect(() => {
         axios.get(receiptApiEndpoints.receipt + '/' + props.match.params.receipt_id)
@@ -48,12 +49,17 @@ const EditReceipt = (props) => {
             setValue('receipt_number', response.data.receipt_number);
             setValue('total', response.data.total);
             setValue('store', response.data.store);
+            setValue('payment_type', response.data.payment_type);
         })
         .catch(error => {
             console.error(error);
         });
     }, [props.match.params.receipt_id, setValue]);
 
+    const togglePayment = () => {
+        setPaymentType((prev) => (prev === 'Cash' ? 'Card' : 'Cash'));
+    };
+    
     const submitUpdateReceipt = (data) => {
         setSubmitting(true);
         data.date = dayjs(data.date).format('YYYY-MM-DD');
@@ -139,6 +145,23 @@ const EditReceipt = (props) => {
                 <label>{t("Store")}</label>
                 <input type="text" ref={register} name="store" className="p-inputtext p-component p-filled" placeholder={t("Store")} />
                 <p className="text-error">{errors.store?.message}</p>
+            </div>
+            <div className="p-grid p-nogutter p-justify-between">
+                <label className="color-title p-col-4">
+                    {t("Payment Type")}:
+                </label>
+                <h3 className="color-highlight p-col-4">
+                    {t(paymentType)}
+                </h3>
+                <h3>
+                    <Button 
+                        label={t("Toggle")} 
+                        icon="pi pi-refresh"
+                        className="p-button-rounded p-button-raised p-button-secondary"
+                        type="button"
+                        onClick={togglePayment} 
+                    />
+                </h3>
             </div>
             <div className="p-fluid">
                 <Button disabled={submitting} type="submit" label={t("Save Changes")} icon="pi pi-save" className="p-button-raised" />
